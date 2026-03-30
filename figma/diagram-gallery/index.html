@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagram Gallery — 15種の図解コレクション</title>
+<meta name="description" content="フローチャート、組織図、SWOT分析、マインドマップ、ベン図など15種類の図解をHTML/CSS/SVGで作成。Claude Code × Figma 性能テスト。">
+<!-- OGP -->
+<meta property="og:title" content="Diagram Gallery — 15種の図解コレクション">
+<meta property="og:description" content="フローチャート、SWOT、マインドマップ、ベン図など15種の図解をClaude Code × Figmaで作成。">
+<meta property="og:image" content="https://langrowb.github.io/lab/figma/diagram-gallery/ogp.png">
+<meta property="og:url" content="https://langrowb.github.io/lab/figma/diagram-gallery/">
+<meta property="og:type" content="website">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Diagram Gallery — 15種の図解コレクション">
+<meta name="twitter:description" content="15種の図解をClaude Code × Figmaで作成。HTML/CSS/SVGで完全再現。">
+<meta name="twitter:image" content="https://langrowb.github.io/lab/figma/diagram-gallery/ogp.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif; background: #f4f4f8; color: #1a1a2e; overflow-x: clip; }
+  @media (max-width: 768px) { html, body { overflow-x: hidden; width: 100%; } }
+
+  /* Header */
+  .site-header { background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%); padding: 64px 80px 40px; }
+  .site-header h1 { font-size: 48px; font-weight: 700; color: #fff; letter-spacing: -1px; }
+  .site-header h1 span { color: #6c8fff; }
+  .site-header p { margin-top: 12px; font-size: 16px; color: #8899cc; }
+
+  /* Sticky nav */
+  .sticky-nav { position: sticky; top: 0; z-index: 100; background: rgba(15, 15, 35, 0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 15px 80px; }
+  .nav-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .nav-chips a { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #aabcee; font-size: 12px; padding: 6px 14px; border-radius: 20px; text-decoration: none; transition: background .2s; margin: 5px 0; }
+  .nav-chips a:hover { background: rgba(108,143,255,0.25); color: #fff; }
+
+  /* Section wrapper */
+  .diagram-section { max-width: 1440px; margin: 0 auto; padding: 60px 80px; }
+  .diagram-section + .diagram-section { border-top: 1px solid #e0e0ea; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #8899bb; margin-bottom: 8px; }
+  .section-title { font-size: 28px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .section-sub { font-size: 14px; color: #6677aa; margin-bottom: 40px; }
+
+  /* Dark section */
+  .dark { background: #0d0d1a; }
+  .dark .section-title { color: #dde5ff; }
+  .dark .section-sub { color: #5566aa; }
+  .dark .section-label { color: #4455aa; }
+
+  /* ── 01 Flowchart ── */
+  .flow-wrap { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .flow-node { background: #fff; border: 2px solid #dde; border-radius: 12px; padding: 12px 28px; font-size: 14px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.06); min-width: 180px; }
+  .flow-node.start { background: #3575f0; color: #fff; border-color: #3575f0; border-radius: 24px; }
+  .flow-node.end { background: #1a7a5e; color: #fff; border-color: #1a7a5e; border-radius: 24px; }
+  .flow-node.action { background: #fff; color: #1a1a2e; }
+  .flow-node.alt { background: #fff5f5; border-color: #f08080; color: #b00; }
+  .flow-arrow { width: 2px; height: 28px; background: #aab; margin: 0 auto; }
+  .flow-diamond-wrap { position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+  .flow-diamond { width: 120px; height: 120px; background: #ffd84d; border: 2px solid #ccaa00; transform: rotate(45deg); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .flow-diamond-label { position: absolute; font-size: 13px; font-weight: 600; color: #4a3800; text-align: center; pointer-events: none; }
+  .flow-branch { display: flex; align-items: flex-start; gap: 0; width: 100%; max-width: 700px; }
+  .flow-branch-line { flex: 1; height: 2px; background: #aab; margin-top: 60px; }
+  .flow-branch-side { display: flex; flex-direction: column; align-items: center; }
+  .flow-branch-label { font-size: 11px; color: #888; margin: 4px 0; }
+
+  /* ── 02 Org Chart ── */
+  .org-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .org-tree { display: flex; flex-direction: column; align-items: center; gap: 0; min-width: 1100px; }
+  .org-row { display: flex; justify-content: center; gap: 12px; position: relative; }
+  .org-row + .org-row { margin-top: 40px; }
+  .org-card { border-radius: 10px; padding: 10px 20px; font-size: 13px; font-weight: 700; color: #fff; text-align: center; min-width: 150px; box-shadow: 0 3px 12px rgba(0,0,0,.12); position: relative; }
+  .org-card.ceo { background: #1e3a8a; min-width: 200px; font-size: 14px; padding: 14px 24px; }
+  .org-card.div-sales { background: #2563eb; }
+  .org-card.div-dev { background: #16a34a; }
+  .org-card.div-admin { background: #d97706; }
+  .org-card.dept { background: #fff; color: #1a1a2e; border: 2px solid #dde; font-weight: 600; }
+  .org-card.team { background: #f0f2ff; color: #1a1a2e; border: 2px solid #c8cff0; font-weight: 500; font-size: 12px; min-width: 120px; }
+  .org-card sub { display: block; font-weight: 400; font-size: 11px; opacity: .8; margin-top: 2px; }
+  .org-connector { width: 2px; height: 40px; background: #ccd; margin: 0 auto; }
+  .org-h-line { height: 2px; background: #ccd; position: absolute; top: -21px; }
+
+  /* ── 03 SWOT ── */
+  .swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .swot-cell { border-radius: 14px; padding: 28px 32px; box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+  .swot-cell h3 { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 16px; }
+  .swot-cell ul { list-style: none; }
+  .swot-cell ul li { font-size: 13px; color: rgba(255,255,255,.92); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .swot-cell ul li:last-child { border: none; }
+  .swot-s { background: #16a34a; }
+  .swot-o { background: #2563eb; }
+  .swot-w { background: #d97706; }
+  .swot-t { background: #dc2626; }
+  .swot-axis { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 10px; }
+  .swot-axis-label { font-size: 12px; font-weight: 700; color: #6677aa; text-align: center; padding: 6px; }
+
+  /* ── 04 Mind Map ── */
+  .mindmap-svg { width: 100%; max-width: 1200px; display: block; margin: 0 auto; }
+
+  /* ── 05 Venn ── */
+  .venn-svg { width: 100%; max-width: 900px; display: block; margin: 0 auto; }
+
+  /* SVGs — all scale with viewBox */
+  .mindmap-svg, .venn-svg, .posmap-svg, .sysdiag-svg, .seq-svg, .erd-svg { max-width: 100%; height: auto; }
+
+  /* ── 06 Matrix ── */
+  .matrix-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; border: 2px solid #dde; border-radius: 12px; overflow: hidden; }
+  .matrix-cell { padding: 28px 32px; }
+  .matrix-cell h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .matrix-cell ul { list-style: none; }
+  .matrix-cell ul li { font-size: 13px; color: #445; padding: 4px 0; }
+  .matrix-q1 { background: #fff0f0; } .matrix-q1 h3 { color: #c00; }
+  .matrix-q2 { background: #f0fff4; } .matrix-q2 h3 { color: #16a34a; }
+  .matrix-q3 { background: #fffbeb; } .matrix-q3 h3 { color: #b45309; }
+  .matrix-q4 { background: #f5f5f5; } .matrix-q4 h3 { color: #555; }
+  .matrix-labels { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 6px; }
+  .matrix-labels span { font-size: 12px; font-weight: 700; color: #8899bb; text-align: center; }
+
+  /* ── 07 Pyramid ── */
+  .pyramid-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .pyramid-layer { display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; border-radius: 6px; position: relative; }
+  .pyramid-layer span.name { font-size: 15px; }
+  .pyramid-layer span.sub { font-size: 12px; font-weight: 400; opacity: .85; margin-left: 12px; }
+  .pyramid-badge { position: absolute; right: -44px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; }
+
+  /* ── 08 Timeline ── */
+  .timeline-wrap { position: relative; padding: 20px 0; }
+  .timeline-axis { height: 4px; background: linear-gradient(90deg, #6c8fff, #a78bfa); border-radius: 2px; margin: 100px 0; position: relative; }
+  .timeline-items { position: relative; }
+  .tl-item { position: absolute; text-align: center; }
+  .tl-dot { width: 18px; height: 18px; border-radius: 50%; margin: 0 auto; box-shadow: 0 0 12px currentColor; }
+  .tl-stem { width: 2px; background: currentColor; margin: 0 auto; }
+  .tl-card { background: #fff; border-radius: 10px; padding: 12px 16px; font-size: 12px; border: 2px solid currentColor; box-shadow: 0 2px 8px rgba(0,0,0,.08); width: 180px; margin: 0 auto; }
+  .tl-card strong { display: block; font-size: 13px; margin-bottom: 4px; }
+  .tl-quarter { position: absolute; font-size: 12px; color: #8899bb; font-weight: 600; }
+
+  /* ── 09 Positioning Map ── */
+  .posmap-svg { width: 100%; max-width: 900px; display: block; margin: 0 auto; }
+
+  /* ── 10 Swimlane ── */
+  .swimlane-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .swimlane-table th { font-size: 13px; font-weight: 700; color: #fff; padding: 14px 16px; text-align: center; }
+  .swimlane-table td { padding: 12px 10px; border: 1px solid #e8e8f0; vertical-align: top; min-height: 60px; }
+  .lane-label { width: 130px; font-size: 13px; font-weight: 700; text-align: center; color: #fff; padding: 14px 10px; }
+  .sl-card { background: #fff; border-radius: 8px; padding: 8px 10px; font-size: 12px; border-left: 3px solid; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+
+  /* ── 11 System Diagram ── */
+  .sysdiag-svg { width: 100%; max-width: 1200px; display: block; margin: 0 auto; }
+
+  /* ── 12 User Journey ── */
+  .journey-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .journey-table { width: 100%; min-width: 1100px; border-collapse: collapse; }
+  .journey-table th { padding: 12px 8px; font-size: 13px; font-weight: 700; color: #fff; text-align: center; }
+  .journey-table td { padding: 10px 8px; font-size: 12px; border: 1px solid #eee; vertical-align: top; text-align: center; line-height: 1.5; }
+  .journey-table tr:nth-child(odd) td { background: #fafaff; }
+  .journey-row-label { font-weight: 700; font-size: 11px; color: #8899bb; background: #f5f5ff !important; text-align: left !important; padding-left: 12px !important; }
+
+  /* ── 13 Gantt ── */
+  .gantt-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .gantt-table { width: 100%; min-width: 1100px; border-collapse: collapse; }
+  .gantt-table th { font-size: 12px; font-weight: 600; color: #8899bb; padding: 8px 4px; text-align: center; background: #f0f2ff; border: 1px solid #e0e4f0; }
+  .gantt-table td { border: 1px solid #eeeff8; padding: 4px; height: 40px; }
+  .gantt-label { font-size: 12px; color: #1a1a2e; padding: 0 12px !important; white-space: nowrap; }
+  .gantt-role { font-size: 11px; color: #8899bb; padding: 0 8px !important; }
+  .gantt-bar { height: 26px; border-radius: 6px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; color: #fff; font-weight: 600; white-space: nowrap; overflow: hidden; }
+  .gantt-today { background: rgba(220,38,38,.15); border-left: 2px solid #dc2626; }
+
+  /* ── 14 Sequence ── */
+  .seq-svg { width: 100%; max-width: 1200px; display: block; margin: 0 auto; }
+
+  /* ── 15 ERD ── */
+  .erd-svg { width: 100%; max-width: 1200px; display: block; margin: 0 auto; }
+
+  /* Footer */
+  footer { background: #0d0d1a; padding: 40px 80px; text-align: center; font-size: 13px; color: #445588; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    /* Header */
+    .site-header { padding: 40px 20px 28px; max-width: 100vw; overflow: hidden; }
+    .site-header h1 { font-size: 32px; }
+    .site-header p { font-size: 13px; }
+
+    /* Sticky nav → fixed on mobile to always match viewport width */
+    .sticky-nav { position: fixed; top: 0; left: 0; right: 0; width: 100%; padding: 12px 16px; overflow: hidden; max-width: 100vw; }
+    .nav-chips { gap: 6px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .nav-chips::-webkit-scrollbar { display: none; }
+    .nav-chips a { font-size: 11px; padding: 6px 11px; white-space: nowrap; flex-shrink: 0; margin: 0; }
+    /* compensate for fixed nav height (~54px) */
+    .site-header { padding-top: 94px; }
+
+    /* Sections */
+    .diagram-section { padding: 40px 20px; max-width: 100vw; overflow-x: auto; }
+    .section-title { font-size: 22px; }
+    .section-sub { font-size: 13px; margin-bottom: 28px; }
+
+    /* 01 Flowchart */
+    .flow-node { min-width: 120px; font-size: 13px; padding: 10px 16px; }
+    .flow-diamond { width: 80px; height: 80px; }
+    .flow-diamond-wrap { width: 140px !important; height: 80px !important; }
+    .flow-diamond-label { font-size: 11px; }
+
+    /* 03 SWOT */
+    .swot-grid { grid-template-columns: 1fr; }
+    .swot-cell { padding: 20px 22px; }
+    .swot-cell h3 { font-size: 16px; }
+
+    /* 06 Matrix */
+    .matrix-grid { grid-template-columns: 1fr; }
+    .matrix-cell { padding: 20px 22px; }
+
+    /* 07 Pyramid */
+    .pyramid-layer { justify-content: flex-start; padding-left: 16px !important; }
+    .pyramid-layer span.name { font-size: 13px; }
+    .pyramid-layer span.sub { font-size: 10px; }
+    .pyramid-badge { right: 4px !important; width: 24px; height: 24px; font-size: 11px; }
+
+    /* Footer */
+    footer { padding: 32px 20px; }
+  }
+
+  @media (max-width: 480px) {
+    .site-header h1 { font-size: 26px; }
+    .diagram-section { padding: 32px 16px; }
+    .swot-cell { padding: 16px 18px; }
+    .swot-cell h3 { font-size: 15px; }
+    .swot-cell ul li { font-size: 12px; }
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header class="site-header">
+  <h1>Diagram <span>Gallery</span></h1>
+  <p>15種の図解コレクション — Claude Code × Figma 性能テスト</p>
+</header>
+<div class="sticky-nav">
+  <nav class="nav-chips">
+    <a href="#flowchart">フローチャート</a>
+    <a href="#orgchart">組織図</a>
+    <a href="#swot">SWOT分析</a>
+    <a href="#mindmap">マインドマップ</a>
+    <a href="#venn">ベン図</a>
+    <a href="#matrix">マトリクス</a>
+    <a href="#pyramid">ピラミッド</a>
+    <a href="#timeline">タイムライン</a>
+    <a href="#posmap">ポジショニングマップ</a>
+    <a href="#swimlane">スイムレーン</a>
+    <a href="#sysdiag">システム構成図</a>
+    <a href="#journey">ユーザージャーニー</a>
+    <a href="#gantt">ガントチャート</a>
+    <a href="#sequence">シーケンス図</a>
+    <a href="#erd">ERD</a>
+  </nav>
+</div>
+
+<!-- ========== 01 FLOWCHART ========== -->
+<section class="diagram-section" id="flowchart">
+  <div class="section-label">01 / Flow &amp; Process</div>
+  <h2 class="section-title">フローチャート</h2>
+  <p class="section-sub">商品購入フロー — 分岐・条件判定を含むプロセス可視化</p>
+  <div class="flow-wrap">
+    <div class="flow-node start">スタート</div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node action">商品を検索する</div>
+    <div class="flow-arrow"></div>
+    <!-- Diamond -->
+    <div class="flow-diamond-wrap" style="width:200px;height:120px;">
+      <div class="flow-diamond"></div>
+      <div class="flow-diamond-label">在庫あり？</div>
+    </div>
+    <!-- Branch -->
+    <div style="display:flex;align-items:flex-start;width:100%;max-width:600px;justify-content:center;">
+      <!-- No branch left -->
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div style="width:2px;height:24px;background:#aab;"></div>
+        <div class="flow-node alt" style="min-width:140px;">「在庫なし」表示</div>
+        <div style="font-size:11px;color:#999;margin-top:4px;">← なし</div>
+      </div>
+      <div style="width:80px;height:2px;background:#aab;margin-top:24px;"></div>
+      <!-- Yes branch -->
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div style="font-size:11px;color:#999;margin-bottom:4px;">あり ↓</div>
+        <div class="flow-node action" style="min-width:150px;">カートに追加</div>
+        <div class="flow-arrow"></div>
+        <!-- 2nd diamond -->
+        <div class="flow-diamond-wrap" style="width:200px;height:120px;">
+          <div class="flow-diamond" style="background:#a78bfa;border-color:#7c3aed;"></div>
+          <div class="flow-diamond-label">会員登録済？</div>
+        </div>
+        <div style="font-size:11px;color:#999;margin-bottom:4px;">はい ↓</div>
+        <div class="flow-node action" style="min-width:160px;">支払い情報を入力</div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node action" style="min-width:140px;background:#eef3ff;border-color:#6c8fff;">注文確定</div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node end">完了メール送信 → 終了</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 02 ORG CHART ========== -->
+<section class="diagram-section" id="orgchart" style="background:#f8f8fc;">
+  <div class="section-label">02 / Hierarchy</div>
+  <h2 class="section-title">組織図</h2>
+  <p class="section-sub">株式会社サンプル — 4階層の部門構造</p>
+  <div class="org-wrap">
+    <div class="org-tree">
+      <!-- L1 -->
+      <div class="org-row">
+        <div class="org-card ceo">代表取締役 CEO<sub>田中 太郎</sub></div>
+      </div>
+      <div class="org-connector"></div>
+      <!-- L2 -->
+      <div class="org-row" style="gap:40px;">
+        <div class="org-card div-sales">営業本部<sub>売上・顧客開拓</sub></div>
+        <div class="org-card div-dev">開発本部<sub>製品・技術</sub></div>
+        <div class="org-card div-admin">管理本部<sub>人事・財務・法務</sub></div>
+      </div>
+      <div style="display:flex;gap:40px;justify-content:center;">
+        <div class="org-connector"></div>
+        <div class="org-connector"></div>
+        <div class="org-connector"></div>
+      </div>
+      <!-- L3 -->
+      <div style="display:flex;gap:16px;justify-content:center;">
+        <div style="display:flex;gap:8px;">
+          <div class="org-card dept">国内営業部</div>
+          <div class="org-card dept">海外営業部</div>
+        </div>
+        <div style="width:40px;"></div>
+        <div style="display:flex;gap:8px;">
+          <div class="org-card dept">フロントエンド</div>
+          <div class="org-card dept">バックエンド</div>
+        </div>
+        <div style="width:40px;"></div>
+        <div style="display:flex;gap:8px;">
+          <div class="org-card dept">人事部</div>
+          <div class="org-card dept">財務部</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;justify-content:center;">
+        <div style="display:flex;gap:8px;">
+          <div class="org-connector"></div><div class="org-connector"></div>
+        </div>
+        <div style="width:48px;"></div>
+        <div style="display:flex;gap:8px;">
+          <div class="org-connector"></div><div class="org-connector"></div>
+        </div>
+        <div style="width:48px;"></div>
+        <div style="display:flex;gap:8px;">
+          <div class="org-connector"></div><div class="org-connector"></div>
+        </div>
+      </div>
+      <!-- L4 -->
+      <div style="display:flex;gap:16px;justify-content:center;">
+        <div style="display:flex;gap:8px;">
+          <div class="org-card team">首都圏チーム</div>
+          <div class="org-card team">関西チーム</div>
+        </div>
+        <div style="width:48px;"></div>
+        <div style="display:flex;gap:8px;">
+          <div class="org-card team">UIチーム</div>
+          <div class="org-card team">APIチーム</div>
+        </div>
+        <div style="width:48px;"></div>
+        <div style="display:flex;gap:8px;">
+          <div class="org-card team">採用チーム</div>
+          <div class="org-card team">経理チーム</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 03 SWOT ========== -->
+<section class="diagram-section" id="swot">
+  <div class="section-label">03 / Analysis</div>
+  <h2 class="section-title">SWOT分析</h2>
+  <p class="section-sub">新規サービス参入検討 — 内部環境 × 外部環境</p>
+  <div class="swot-axis">
+    <span>内部環境</span><span>外部環境</span>
+  </div>
+  <div class="swot-grid">
+    <div class="swot-cell swot-s">
+      <h3>S — 強み</h3>
+      <ul>
+        <li>✓ 独自の技術特許を3件保有</li>
+        <li>✓ 顧客満足度92%の実績</li>
+        <li>✓ 熟練エンジニア15名在籍</li>
+        <li>✓ 短納期対応力（平均2週間）</li>
+      </ul>
+    </div>
+    <div class="swot-cell swot-o">
+      <h3>O — 機会</h3>
+      <ul>
+        <li>✓ 市場規模が年10%成長</li>
+        <li>✓ 競合大手が撤退予定</li>
+        <li>✓ DX補助金の活用可能</li>
+        <li>✓ 海外展開ニーズの高まり</li>
+      </ul>
+    </div>
+    <div class="swot-cell swot-w">
+      <h3>W — 弱み</h3>
+      <ul>
+        <li>✗ 認知度が低い（ブランド未確立）</li>
+        <li>✗ 営業人員が不足</li>
+        <li>✗ 初期投資コストが高い</li>
+        <li>✗ アフターサポート体制が薄い</li>
+      </ul>
+    </div>
+    <div class="swot-cell swot-t">
+      <h3>T — 脅威</h3>
+      <ul>
+        <li>✗ 低価格競合の台頭</li>
+        <li>✗ 規制強化のリスク</li>
+        <li>✗ 原材料費の高騰</li>
+        <li>✗ 人材獲得競争の激化</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 04 MIND MAP ========== -->
+<section class="diagram-section" id="mindmap" style="background:#f8f8fc;">
+  <div class="section-label">04 / Structure</div>
+  <h2 class="section-title">マインドマップ</h2>
+  <p class="section-sub">新規事業アイデア展開</p>
+  <svg class="mindmap-svg" viewBox="0 0 1100 700" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+        <circle cx="3" cy="3" r="2" fill="#aab"/>
+      </marker>
+    </defs>
+    <!-- Center -->
+    <ellipse cx="550" cy="350" rx="80" ry="36" fill="#1e3a8a"/>
+    <text x="550" y="355" text-anchor="middle" fill="white" font-weight="700" font-size="16" font-family="Noto Sans JP,sans-serif">新規事業</text>
+
+    <!-- Branch: 市場調査 (top-left) -->
+    <line x1="480" y1="330" x2="310" y2="200" stroke="#16a34a" stroke-width="2.5"/>
+    <ellipse cx="260" cy="185" rx="70" ry="28" fill="#16a34a"/>
+    <text x="260" y="190" text-anchor="middle" fill="white" font-size="13" font-weight="700" font-family="Noto Sans JP,sans-serif">市場調査</text>
+    <line x1="200" y1="172" x2="120" y2="130" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="30" y="115" width="120" height="30" rx="8" fill="white" stroke="#86efac" stroke-width="1.5"/>
+    <text x="90" y="134" text-anchor="middle" fill="#166534" font-size="11" font-family="Noto Sans JP,sans-serif">顧客インタビュー</text>
+    <line x1="210" y1="185" x2="120" y2="180" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="25" y="166" width="100" height="28" rx="8" fill="white" stroke="#86efac" stroke-width="1.5"/>
+    <text x="75" y="184" text-anchor="middle" fill="#166534" font-size="11" font-family="Noto Sans JP,sans-serif">競合分析</text>
+    <line x1="205" y1="198" x2="120" y2="230" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="22" y="217" width="118" height="28" rx="8" fill="white" stroke="#86efac" stroke-width="1.5"/>
+    <text x="81" y="235" text-anchor="middle" fill="#166534" font-size="11" font-family="Noto Sans JP,sans-serif">市場規模推定</text>
+
+    <!-- Branch: 技術開発 (top-right) -->
+    <line x1="620" y1="330" x2="790" y2="200" stroke="#2563eb" stroke-width="2.5"/>
+    <ellipse cx="840" cy="185" rx="70" ry="28" fill="#2563eb"/>
+    <text x="840" y="190" text-anchor="middle" fill="white" font-size="13" font-weight="700" font-family="Noto Sans JP,sans-serif">技術開発</text>
+    <line x1="900" y1="172" x2="970" y2="130" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="950" y="115" width="130" height="30" rx="8" fill="white" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="1015" y="134" text-anchor="middle" fill="#1e40af" font-size="11" font-family="Noto Sans JP,sans-serif">プロトタイプ制作</text>
+    <line x1="905" y1="185" x2="975" y2="182" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="968" y="168" width="110" height="28" rx="8" fill="white" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="1023" y="186" text-anchor="middle" fill="#1e40af" font-size="11" font-family="Noto Sans JP,sans-serif">AI活用検討</text>
+    <line x1="900" y1="198" x2="970" y2="230" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="962" y="217" width="100" height="28" rx="8" fill="white" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="1012" y="235" text-anchor="middle" fill="#1e40af" font-size="11" font-family="Noto Sans JP,sans-serif">特許調査</text>
+
+    <!-- Branch: マーケティング (right) -->
+    <line x1="630" y1="355" x2="820" y2="355" stroke="#d97706" stroke-width="2.5"/>
+    <ellipse cx="880" cy="355" rx="78" ry="28" fill="#d97706"/>
+    <text x="880" y="360" text-anchor="middle" fill="white" font-size="13" font-weight="700" font-family="Noto Sans JP,sans-serif">マーケティング</text>
+    <line x1="952" y1="342" x2="1020" y2="300" stroke="#fcd34d" stroke-width="1.5"/>
+    <rect x="1010" y="285" width="90" height="28" rx="8" fill="white" stroke="#fcd34d" stroke-width="1.5"/>
+    <text x="1055" y="303" text-anchor="middle" fill="#92400e" font-size="11" font-family="Noto Sans JP,sans-serif">SNS戦略</text>
+    <line x1="958" y1="355" x2="1020" y2="355" stroke="#fcd34d" stroke-width="1.5"/>
+    <rect x="1010" y="341" width="80" height="28" rx="8" fill="white" stroke="#fcd34d" stroke-width="1.5"/>
+    <text x="1050" y="359" text-anchor="middle" fill="#92400e" font-size="11" font-family="Noto Sans JP,sans-serif">PR・広報</text>
+    <line x1="952" y1="368" x2="1020" y2="410" stroke="#fcd34d" stroke-width="1.5"/>
+    <rect x="1010" y="396" width="80" height="28" rx="8" fill="white" stroke="#fcd34d" stroke-width="1.5"/>
+    <text x="1050" y="414" text-anchor="middle" fill="#92400e" font-size="11" font-family="Noto Sans JP,sans-serif">価格設計</text>
+
+    <!-- Branch: 資金調達 (bottom) -->
+    <line x1="550" y1="386" x2="550" y2="480" stroke="#7c3aed" stroke-width="2.5"/>
+    <ellipse cx="550" cy="510" rx="72" ry="28" fill="#7c3aed"/>
+    <text x="550" y="515" text-anchor="middle" fill="white" font-size="13" font-weight="700" font-family="Noto Sans JP,sans-serif">資金調達</text>
+    <line x1="490" y1="528" x2="420" y2="570" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="320" y="557" width="110" height="28" rx="8" fill="white" stroke="#c4b5fd" stroke-width="1.5"/>
+    <text x="375" y="575" text-anchor="middle" fill="#4c1d95" font-size="11" font-family="Noto Sans JP,sans-serif">VC・投資家</text>
+    <line x1="550" y1="538" x2="550" y2="578" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="490" y="565" width="120" height="28" rx="8" fill="white" stroke="#c4b5fd" stroke-width="1.5"/>
+    <text x="550" y="583" text-anchor="middle" fill="#4c1d95" font-size="11" font-family="Noto Sans JP,sans-serif">補助金申請</text>
+    <line x1="610" y1="528" x2="680" y2="570" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="672" y="557" width="130" height="28" rx="8" fill="white" stroke="#c4b5fd" stroke-width="1.5"/>
+    <text x="737" y="575" text-anchor="middle" fill="#4c1d95" font-size="11" font-family="Noto Sans JP,sans-serif">クラウドファンド</text>
+
+    <!-- Branch: チーム構築 (left) -->
+    <line x1="470" y1="355" x2="280" y2="355" stroke="#d97706" stroke-width="2.5"/>
+    <ellipse cx="220" cy="355" rx="72" ry="28" fill="#b45309"/>
+    <text x="220" y="360" text-anchor="middle" fill="white" font-size="13" font-weight="700" font-family="Noto Sans JP,sans-serif">チーム構築</text>
+    <line x1="150" y1="342" x2="80" y2="300" stroke="#fde68a" stroke-width="1.5"/>
+    <rect x="-2" y="285" width="90" height="28" rx="8" fill="white" stroke="#fde68a" stroke-width="1.5"/>
+    <text x="43" y="303" text-anchor="middle" fill="#78350f" font-size="11" font-family="Noto Sans JP,sans-serif">採用計画</text>
+    <line x1="148" y1="355" x2="78" y2="355" stroke="#fde68a" stroke-width="1.5"/>
+    <rect x="-2" y="341" width="88" height="28" rx="8" fill="white" stroke="#fde68a" stroke-width="1.5"/>
+    <text x="42" y="359" text-anchor="middle" fill="#78350f" font-size="11" font-family="Noto Sans JP,sans-serif">外部委託</text>
+    <line x1="150" y1="368" x2="80" y2="408" stroke="#fde68a" stroke-width="1.5"/>
+    <rect x="-2" y="395" width="88" height="28" rx="8" fill="white" stroke="#fde68a" stroke-width="1.5"/>
+    <text x="42" y="413" text-anchor="middle" fill="#78350f" font-size="11" font-family="Noto Sans JP,sans-serif">組織設計</text>
+  </svg>
+</section>
+
+<!-- ========== 05 VENN ========== -->
+<section class="diagram-section" id="venn" style="background:#0d0d1a;">
+  <div class="section-label" style="color:#334466;">05 / Relationship</div>
+  <h2 class="section-title" style="color:#dde5ff;">ベン図</h2>
+  <p class="section-sub" style="color:#4455aa;">プロダクト・マーケット・フィット（PMF）の構成要素</p>
+  <svg class="venn-svg" viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#4099ff" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#4099ff" stop-opacity="0.05"/>
+      </radialGradient>
+      <radialGradient id="g2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#26d199" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#26d199" stop-opacity="0.05"/>
+      </radialGradient>
+      <radialGradient id="g3" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ff7340" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#ff7340" stop-opacity="0.05"/>
+      </radialGradient>
+      <filter id="glow1"><feGaussianBlur stdDeviation="18" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <!-- Glow backgrounds -->
+    <circle cx="450" cy="210" r="160" fill="#1a3a6a" opacity="0.5" filter="url(#glow1)"/>
+    <circle cx="330" cy="400" r="160" fill="#0a3a2a" opacity="0.5" filter="url(#glow1)"/>
+    <circle cx="570" cy="400" r="160" fill="#4a1a0a" opacity="0.5" filter="url(#glow1)"/>
+    <!-- Circles -->
+    <circle cx="450" cy="210" r="165" fill="url(#g1)" stroke="#4099ff" stroke-width="2"/>
+    <circle cx="330" cy="400" r="165" fill="url(#g2)" stroke="#26d199" stroke-width="2"/>
+    <circle cx="570" cy="400" r="165" fill="url(#g3)" stroke="#ff7340" stroke-width="2"/>
+    <!-- Main labels -->
+    <text x="450" y="110" text-anchor="middle" fill="#4099ff" font-weight="700" font-size="16" font-family="Noto Sans JP,sans-serif">顧客のニーズ</text>
+    <text x="195" y="440" text-anchor="middle" fill="#26d199" font-weight="700" font-size="16" font-family="Noto Sans JP,sans-serif">自社の強み</text>
+    <text x="705" y="440" text-anchor="middle" fill="#ff7340" font-weight="700" font-size="16" font-family="Noto Sans JP,sans-serif">市場の収益性</text>
+    <!-- Intersection labels -->
+    <text x="375" y="298" text-anchor="middle" fill="#99e0bf" font-size="11" font-family="Noto Sans JP,sans-serif">顧客価値</text>
+    <text x="375" y="312" text-anchor="middle" fill="#99e0bf" font-size="11" font-family="Noto Sans JP,sans-serif">(Value Proposition)</text>
+    <text x="525" y="298" text-anchor="middle" fill="#c4b5fd" font-size="11" font-family="Noto Sans JP,sans-serif">収益機会</text>
+    <text x="525" y="312" text-anchor="middle" fill="#c4b5fd" font-size="11" font-family="Noto Sans JP,sans-serif">(Revenue Opp.)</text>
+    <text x="450" y="448" text-anchor="middle" fill="#ffd180" font-size="11" font-family="Noto Sans JP,sans-serif">競合優位</text>
+    <text x="450" y="462" text-anchor="middle" fill="#ffd180" font-size="11" font-family="Noto Sans JP,sans-serif">(Competitive Adv.)</text>
+    <!-- Center PMF -->
+    <circle cx="450" cy="375" r="46" fill="white" opacity="0.95"/>
+    <circle cx="450" cy="375" r="46" fill="none" stroke="#6c8fff" stroke-width="1.5" opacity="0.5"/>
+    <text x="450" y="381" text-anchor="middle" fill="#1a1a40" font-weight="700" font-size="17" font-family="Noto Sans JP,sans-serif">PMF</text>
+    <!-- Legend -->
+    <circle cx="160" cy="570" r="6" fill="#4099ff"/>
+    <text x="173" y="575" fill="#8899cc" font-size="12" font-family="Noto Sans JP,sans-serif">顧客のニーズ — 解決すべき課題・欲求が明確に存在する</text>
+    <circle cx="160" cy="595" r="6" fill="#26d199"/>
+    <text x="173" y="600" fill="#8899cc" font-size="12" font-family="Noto Sans JP,sans-serif">自社の強み — 他社が容易に模倣できない独自の能力・資源</text>
+  </svg>
+</section>
+
+<!-- ========== 06 MATRIX ========== -->
+<section class="diagram-section" id="matrix" style="background:#f8f8fc;">
+  <div class="section-label">06 / Prioritization</div>
+  <h2 class="section-title">2×2 マトリクス</h2>
+  <p class="section-sub">アイゼンハワーマトリクス — タスク優先度の整理</p>
+  <div style="max-width:900px;margin:0 auto;">
+    <div class="matrix-labels">
+      <span>← 緊急でない　　緊急 →</span>
+      <span></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:12px;font-weight:700;color:#8899bb;white-space:nowrap;">← 重要でない　重要 →</div>
+      <div class="matrix-grid" style="flex:1;">
+        <div class="matrix-cell matrix-q1">
+          <h3>🔴 第1領域：即実行</h3>
+          <ul><li>• 締め切りのある重要報告書</li><li>• 顧客クレームの緊急対応</li><li>• システム障害の復旧</li></ul>
+        </div>
+        <div class="matrix-cell matrix-q2">
+          <h3>🟢 第2領域：計画・予防</h3>
+          <ul><li>• 長期戦略の立案</li><li>• スキルアップ・学習</li><li>• 健康管理・予防</li></ul>
+        </div>
+        <div class="matrix-cell matrix-q3">
+          <h3>🟡 第3領域：委任・断る</h3>
+          <ul><li>• 突発的な電話・会議</li><li>• 一部のメール返信</li><li>• 他人の割り込みタスク</li></ul>
+        </div>
+        <div class="matrix-cell matrix-q4">
+          <h3>⚫ 第4領域：削除・放棄</h3>
+          <ul><li>• SNSのダラダラ閲覧</li><li>• 関係ない資料整理</li><li>• 無意味な慣例作業</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 07 PYRAMID ========== -->
+<section class="diagram-section" id="pyramid">
+  <div class="section-label">07 / Hierarchy</div>
+  <h2 class="section-title">ピラミッド図</h2>
+  <p class="section-sub">マズローの欲求5段階説 — 人間の動機づけ構造</p>
+  <div class="pyramid-wrap" style="width:100%;max-width:700px;margin:0 auto;">
+    <div class="pyramid-layer" style="width:23%;min-width:120px;height:72px;background:#3b82f6;padding:0 20px;border-radius:8px 8px 4px 4px;position:relative;">
+      <span class="name">自己実現の欲求</span>
+      <span class="sub" style="margin-left:0;font-size:11px;">成長・創造・使命</span>
+      <div class="pyramid-badge" style="background:#3b82f6;">5</div>
+    </div>
+    <div class="pyramid-layer" style="width:43%;min-width:160px;height:68px;background:#16a34a;position:relative;">
+      <span class="name">承認欲求</span>
+      <span class="sub">尊重・評価・自尊心</span>
+      <div class="pyramid-badge" style="background:#16a34a;">4</div>
+    </div>
+    <div class="pyramid-layer" style="width:63%;min-width:200px;height:68px;background:#ca8a04;position:relative;">
+      <span class="name">社会的欲求</span>
+      <span class="sub">所属・愛情・友情</span>
+      <div class="pyramid-badge" style="background:#ca8a04;">3</div>
+    </div>
+    <div class="pyramid-layer" style="width:80%;min-width:240px;height:68px;background:#ea580c;position:relative;">
+      <span class="name">安全の欲求</span>
+      <span class="sub">安定・安心・健康</span>
+      <div class="pyramid-badge" style="background:#ea580c;">2</div>
+    </div>
+    <div class="pyramid-layer" style="width:97%;height:68px;background:#dc2626;border-radius:4px 4px 8px 8px;position:relative;">
+      <span class="name">生理的欲求</span>
+      <span class="sub">食事・睡眠・生存の基本</span>
+      <div class="pyramid-badge" style="background:#dc2626;">1</div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:center;gap:40px;margin-top:20px;">
+    <span style="font-size:12px;color:#8899bb;">↑ 高次の欲求（自己成長）</span>
+    <span style="font-size:12px;color:#8899bb;">↓ 基本的欲求（生存・安全）</span>
+  </div>
+</section>
+
+<!-- ========== 08 TIMELINE ========== -->
+<section class="diagram-section" id="timeline" style="background:#f8f8fc;">
+  <div class="section-label">08 / Time</div>
+  <h2 class="section-title">プロダクトロードマップ</h2>
+  <p class="section-sub">2025年 新規サービス開発スケジュール</p>
+  <svg viewBox="0 0 1280 400" width="100%" xmlns="http://www.w3.org/2000/svg" style="font-family:Noto Sans JP,sans-serif;">
+    <!-- Axis -->
+    <line x1="60" y1="210" x2="1240" y2="210" stroke="#c8cff0" stroke-width="3"/>
+    <!-- Quarters -->
+    <text x="60" y="240" fill="#8899bb" font-size="12" text-anchor="middle">Q1</text>
+    <text x="360" y="240" fill="#8899bb" font-size="12" text-anchor="middle">Q2</text>
+    <text x="660" y="240" fill="#8899bb" font-size="12" text-anchor="middle">Q3</text>
+    <text x="960" y="240" fill="#8899bb" font-size="12" text-anchor="middle">Q4</text>
+    <line x1="360" y1="196" x2="360" y2="224" stroke="#dde" stroke-width="1.5"/>
+    <line x1="660" y1="196" x2="660" y2="224" stroke="#dde" stroke-width="1.5"/>
+    <line x1="960" y1="196" x2="960" y2="224" stroke="#dde" stroke-width="1.5"/>
+
+    <!-- Items above axis -->
+    <circle cx="100" cy="210" r="10" fill="#3b82f6"/>
+    <line x1="100" y1="200" x2="100" y2="130" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="22" y="72" width="162" height="58" rx="10" fill="white" stroke="#3b82f6" stroke-width="2"/>
+    <text x="103" y="95" text-anchor="middle" fill="#3b82f6" font-weight="700" font-size="12">企画・要件定義</text>
+    <text x="103" y="116" text-anchor="middle" fill="#6677aa" font-size="10">市場調査・競合分析</text>
+
+    <circle cx="520" cy="210" r="10" fill="#ea580c"/>
+    <line x1="520" y1="200" x2="520" y2="130" stroke="#ea580c" stroke-width="1.5"/>
+    <rect x="442" y="72" width="162" height="58" rx="10" fill="white" stroke="#ea580c" stroke-width="2"/>
+    <text x="523" y="95" text-anchor="middle" fill="#ea580c" font-weight="700" font-size="12">開発フェーズ1</text>
+    <text x="523" y="116" text-anchor="middle" fill="#6677aa" font-size="10">認証・基本機能実装</text>
+
+    <circle cx="820" cy="210" r="10" fill="#7c3aed"/>
+    <line x1="820" y1="200" x2="820" y2="130" stroke="#7c3aed" stroke-width="1.5"/>
+    <rect x="742" y="72" width="162" height="58" rx="10" fill="white" stroke="#7c3aed" stroke-width="2"/>
+    <text x="823" y="95" text-anchor="middle" fill="#7c3aed" font-weight="700" font-size="12">開発フェーズ2</text>
+    <text x="823" y="116" text-anchor="middle" fill="#6677aa" font-size="10">追加機能・最適化</text>
+
+    <circle cx="1180" cy="210" r="12" fill="#1e3a8a"/>
+    <line x1="1180" y1="200" x2="1180" y2="130" stroke="#1e3a8a" stroke-width="2"/>
+    <rect x="1098" y="72" width="164" height="58" rx="10" fill="#1e3a8a" stroke="none"/>
+    <text x="1180" y="95" text-anchor="middle" fill="white" font-weight="700" font-size="12">正式リリース</text>
+    <text x="1180" y="116" text-anchor="middle" fill="#93c5fd" font-size="10">プレスリリース配信</text>
+
+    <!-- Items below axis -->
+    <circle cx="280" cy="210" r="10" fill="#16a34a"/>
+    <line x1="280" y1="220" x2="280" y2="290" stroke="#16a34a" stroke-width="1.5"/>
+    <rect x="196" y="290" width="170" height="58" rx="10" fill="white" stroke="#16a34a" stroke-width="2"/>
+    <text x="281" y="313" text-anchor="middle" fill="#16a34a" font-weight="700" font-size="12">UIデザイン</text>
+    <text x="281" y="334" text-anchor="middle" fill="#6677aa" font-size="10">ワイヤーフレーム・テスト</text>
+
+    <circle cx="680" cy="210" r="10" fill="#a855f7"/>
+    <line x1="680" y1="220" x2="680" y2="290" stroke="#a855f7" stroke-width="1.5"/>
+    <rect x="596" y="290" width="170" height="58" rx="10" fill="white" stroke="#a855f7" stroke-width="2"/>
+    <text x="681" y="313" text-anchor="middle" fill="#a855f7" font-weight="700" font-size="12">α版リリース</text>
+    <text x="681" y="334" text-anchor="middle" fill="#6677aa" font-size="10">社内テスト・FB収集</text>
+
+    <circle cx="980" cy="210" r="10" fill="#d97706"/>
+    <line x1="980" y1="220" x2="980" y2="290" stroke="#d97706" stroke-width="1.5"/>
+    <rect x="896" y="290" width="170" height="58" rx="10" fill="white" stroke="#d97706" stroke-width="2"/>
+    <text x="981" y="313" text-anchor="middle" fill="#d97706" font-weight="700" font-size="12">β版公開</text>
+    <text x="981" y="334" text-anchor="middle" fill="#6677aa" font-size="10">外部テスター・改善</text>
+  </svg>
+</section>
+
+<!-- ========== 09 POSITIONING MAP ========== -->
+<section class="diagram-section" id="posmap">
+  <div class="section-label">09 / Competitive</div>
+  <h2 class="section-title">ポジショニングマップ</h2>
+  <p class="section-sub">コーヒーチェーン業界 — 価格帯 × 品質</p>
+  <svg class="posmap-svg" viewBox="0 0 800 580" xmlns="http://www.w3.org/2000/svg" style="font-family:Noto Sans JP,sans-serif;">
+    <!-- Quadrant backgrounds -->
+    <rect x="80" y="40" width="310" height="250" fill="#f0fff4" rx="4"/>
+    <rect x="390" y="40" width="330" height="250" fill="#eff6ff" rx="4"/>
+    <rect x="80" y="290" width="310" height="250" fill="#fff7ed" rx="4"/>
+    <rect x="390" y="290" width="330" height="250" fill="#fdf4ff" rx="4"/>
+    <!-- Axes -->
+    <line x1="80" y1="290" x2="720" y2="290" stroke="#9ca3af" stroke-width="2"/>
+    <line x1="390" y1="40" x2="390" y2="540" stroke="#9ca3af" stroke-width="2"/>
+    <!-- Axis labels -->
+    <text x="88" y="313" fill="#9ca3af" font-size="12">← 低価格</text>
+    <text x="636" y="313" fill="#9ca3af" font-size="12">高価格 →</text>
+    <text x="396" y="60" fill="#9ca3af" font-size="12">高品質 ↑</text>
+    <text x="396" y="534" fill="#9ca3af" font-size="12">↓ 低品質</text>
+    <!-- Quadrant labels -->
+    <text x="92" y="62" fill="#16a34a" font-weight="700" font-size="12">バリュー（高品質・低価格）</text>
+    <text x="398" y="62" fill="#2563eb" font-weight="700" font-size="12">プレミアム（高品質・高価格）</text>
+    <text x="92" y="308" fill="#d97706" font-weight="700" font-size="12">エコノミー</text>
+    <text x="398" y="308" fill="#dc2626" font-weight="700" font-size="12">要注意ゾーン</text>
+    <!-- Brand dots -->
+    <!-- スタバ: 高価格・高品質 -->
+    <circle cx="580" cy="120" r="14" fill="#006241"/>
+    <text x="600" y="116" fill="#1a1a2e" font-size="12" font-weight="600">スターバックス</text>
+    <!-- ブルボトル: より高価格・最高品質 -->
+    <circle cx="660" cy="80" r="14" fill="#2563eb"/>
+    <text x="680" y="76" fill="#1a1a2e" font-size="12" font-weight="600">ブルーボトル</text>
+    <!-- ドトール: 低価格・中品質 -->
+    <circle cx="180" cy="200" r="14" fill="#d97706"/>
+    <text x="200" y="196" fill="#1a1a2e" font-size="12" font-weight="600">ドトール</text>
+    <!-- コメダ: 中価格・中高品質 -->
+    <circle cx="320" cy="160" r="14" fill="#b45309"/>
+    <text x="200" y="160" fill="#1a1a2e" font-size="12" font-weight="600">コメダ珈琲</text>
+    <!-- マクドナルド: 低価格・低品質 -->
+    <circle cx="140" cy="400" r="14" fill="#ca8a04"/>
+    <text x="160" y="396" fill="#1a1a2e" font-size="12" font-weight="600">マクドナルド</text>
+    <!-- コンビニ: 最低価格・低品質 -->
+    <circle cx="100" cy="460" r="14" fill="#6b7280"/>
+    <text x="120" y="456" fill="#1a1a2e" font-size="12" font-weight="600">コンビニコーヒー</text>
+    <!-- 自社（参入予定）: 中価格・高品質 -->
+    <circle cx="440" cy="140" r="18" fill="#dc2626" stroke="white" stroke-width="3"/>
+    <text x="464" y="136" fill="#dc2626" font-size="13" font-weight="700">自社（参入予定）</text>
+  </svg>
+</section>
+
+<!-- ========== 10 SWIMLANE ========== -->
+<section class="diagram-section" id="swimlane" style="background:#f8f8fc;">
+  <div class="section-label">10 / Process</div>
+  <h2 class="section-title">スイムレーン図</h2>
+  <p class="section-sub">採用プロセス — 応募者・人事・現場・役員・システムの役割分担</p>
+  <div style="overflow-x:auto;">
+    <table class="swimlane-table" style="min-width:1000px;">
+      <thead>
+        <tr>
+          <th style="background:#374151;width:110px;">担当</th>
+          <th style="background:#374151;">1月</th>
+          <th style="background:#374151;">2月</th>
+          <th style="background:#374151;">3月</th>
+          <th style="background:#374151;">4月</th>
+          <th style="background:#374151;">5月</th>
+          <th style="background:#374151;">6月</th>
+          <th style="background:#374151;">7月</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="lane-label" style="background:#2563eb;">応募者</td>
+          <td><div class="sl-card" style="border-color:#2563eb;color:#1e3a8a;">求人票を確認</div></td>
+          <td><div class="sl-card" style="border-color:#2563eb;color:#1e3a8a;">エントリー</div></td>
+          <td></td>
+          <td><div class="sl-card" style="border-color:#2563eb;color:#1e3a8a;">一次面接</div></td>
+          <td><div class="sl-card" style="border-color:#2563eb;color:#1e3a8a;">二次面接</div></td>
+          <td></td>
+          <td><div class="sl-card" style="border-color:#2563eb;color:#1e3a8a;">内定承諾</div></td>
+        </tr>
+        <tr>
+          <td class="lane-label" style="background:#16a34a;">人事部門</td>
+          <td></td>
+          <td><div class="sl-card" style="border-color:#16a34a;color:#14532d;">書類選考</div></td>
+          <td><div class="sl-card" style="border-color:#16a34a;color:#14532d;">面接日程調整</div></td>
+          <td></td>
+          <td><div class="sl-card" style="border-color:#16a34a;color:#14532d;">合否連絡</div></td>
+          <td></td>
+          <td><div class="sl-card" style="border-color:#16a34a;color:#14532d;">内定通知送付</div></td>
+        </tr>
+        <tr>
+          <td class="lane-label" style="background:#d97706;">現場部門</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><div class="sl-card" style="border-color:#d97706;color:#78350f;">一次面接（面接官）</div></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="lane-label" style="background:#7c3aed;">役員・経営</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><div class="sl-card" style="border-color:#7c3aed;color:#4c1d95;">役員面接</div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="lane-label" style="background:#6b7280;">システム</td>
+          <td></td>
+          <td><div class="sl-card" style="border-color:#6b7280;color:#374151;">自動確認メール送信</div></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><div class="sl-card" style="border-color:#6b7280;color:#374151;">契約書類自動生成</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ========== 11 SYSTEM DIAGRAM ========== -->
+<section class="diagram-section dark" id="sysdiag">
+  <div class="section-label">11 / Architecture</div>
+  <h2 class="section-title">システム構成図</h2>
+  <p class="section-sub">Webアプリケーション — クラウドインフラ構成</p>
+  <svg class="sysdiag-svg" viewBox="0 0 1100 580" xmlns="http://www.w3.org/2000/svg" style="font-family:Noto Sans JP,sans-serif;">
+    <defs>
+      <marker id="marr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#4466aa"/>
+      </marker>
+    </defs>
+    <!-- Zone backgrounds -->
+    <rect x="20" y="80" width="200" height="80" rx="12" fill="#1a2035" stroke="#2a3555" stroke-width="1"/>
+    <rect x="260" y="80" width="200" height="80" rx="12" fill="#1a2035" stroke="#2a3555" stroke-width="1"/>
+    <rect x="500" y="60" width="480" height="220" rx="12" fill="#151e30" stroke="#2a3355" stroke-width="1"/>
+    <rect x="500" y="310" width="480" height="200" rx="12" fill="#151e2a" stroke="#1e2a45" stroke-width="1"/>
+    <rect x="20" y="310" width="440" height="200" rx="12" fill="#1a1f2e" stroke="#252f44" stroke-width="1"/>
+    <!-- Zone labels -->
+    <text x="30" y="72" fill="#445588" font-size="10">CDN / Edge</text>
+    <text x="268" y="72" fill="#445588" font-size="10">ロードバランサー</text>
+    <text x="510" y="76" fill="#445588" font-size="10">アプリケーション層</text>
+    <text x="510" y="326" fill="#445588" font-size="10">データ層</text>
+    <text x="28" y="326" fill="#445588" font-size="10">外部サービス</text>
+    <!-- Nodes -->
+    <!-- User -->
+    <rect x="20" y="255" width="120" height="46" rx="10" fill="#252a3e" stroke="#3a4466" stroke-width="1.5"/>
+    <text x="80" y="275" text-anchor="middle" fill="#9bb4e8" font-weight="700" font-size="12">ユーザー</text>
+    <text x="80" y="292" text-anchor="middle" fill="#7788aa" font-size="10">（ブラウザ）</text>
+    <!-- CDN -->
+    <rect x="30" y="92" width="160" height="50" rx="10" fill="#1e3a5f" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="110" y="114" text-anchor="middle" fill="#93c5fd" font-weight="700" font-size="13">CDN</text>
+    <text x="110" y="131" text-anchor="middle" fill="#6696cc" font-size="10">CloudFront</text>
+    <!-- LB -->
+    <rect x="272" y="92" width="160" height="50" rx="10" fill="#1a3828" stroke="#16a34a" stroke-width="1.5"/>
+    <text x="352" y="114" text-anchor="middle" fill="#86efac" font-weight="700" font-size="13">ロードバランサー</text>
+    <text x="352" y="131" text-anchor="middle" fill="#4a9966" font-size="10">ALB</text>
+    <!-- API 1 -->
+    <rect x="512" y="88" width="140" height="50" rx="10" fill="#252a3e" stroke="#4466bb" stroke-width="1.5"/>
+    <text x="582" y="109" text-anchor="middle" fill="#9bb4e8" font-weight="700" font-size="12">API Server 1</text>
+    <text x="582" y="126" text-anchor="middle" fill="#6677aa" font-size="10">Node.js / Express</text>
+    <!-- API 2 -->
+    <rect x="672" y="88" width="140" height="50" rx="10" fill="#252a3e" stroke="#4466bb" stroke-width="1.5"/>
+    <text x="742" y="109" text-anchor="middle" fill="#9bb4e8" font-weight="700" font-size="12">API Server 2</text>
+    <text x="742" y="126" text-anchor="middle" fill="#6677aa" font-size="10">Node.js / Express</text>
+    <!-- Auth -->
+    <rect x="832" y="88" width="130" height="50" rx="10" fill="#2a1f3e" stroke="#7c3aed" stroke-width="1.5"/>
+    <text x="897" y="109" text-anchor="middle" fill="#c4b5fd" font-weight="700" font-size="12">Auth Service</text>
+    <text x="897" y="126" text-anchor="middle" fill="#7755aa" font-size="10">JWT / OAuth2</text>
+    <!-- DB -->
+    <rect x="512" y="330" width="140" height="50" rx="10" fill="#3a1a1a" stroke="#dc2626" stroke-width="1.5"/>
+    <text x="582" y="351" text-anchor="middle" fill="#fca5a5" font-weight="700" font-size="12">PostgreSQL</text>
+    <text x="582" y="368" text-anchor="middle" fill="#aa4444" font-size="10">プライマリDB</text>
+    <!-- Redis -->
+    <rect x="672" y="330" width="120" height="50" rx="10" fill="#3a2010" stroke="#ea580c" stroke-width="1.5"/>
+    <text x="732" y="356" text-anchor="middle" fill="#fdba74" font-weight="700" font-size="13">Redis</text>
+    <text x="732" y="371" text-anchor="middle" fill="#9a5020" font-size="10">キャッシュ</text>
+    <!-- S3 -->
+    <rect x="812" y="330" width="140" height="50" rx="10" fill="#1a2e10" stroke="#16a34a" stroke-width="1.5"/>
+    <text x="882" y="353" text-anchor="middle" fill="#86efac" font-weight="700" font-size="13">S3</text>
+    <text x="882" y="368" text-anchor="middle" fill="#2a6622" font-size="10">オブジェクトストレージ</text>
+    <!-- External: Mail -->
+    <rect x="30" y="330" width="120" height="50" rx="10" fill="#1a2535" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="90" y="349" text-anchor="middle" fill="#93c5fd" font-weight="700" font-size="11">メールサービス</text>
+    <text x="90" y="366" text-anchor="middle" fill="#4477aa" font-size="10">SendGrid</text>
+    <!-- Pay -->
+    <rect x="175" y="330" width="110" height="50" rx="10" fill="#1a2a18" stroke="#16a34a" stroke-width="1.5"/>
+    <text x="230" y="352" text-anchor="middle" fill="#86efac" font-weight="700" font-size="12">決済API</text>
+    <text x="230" y="368" text-anchor="middle" fill="#2a5a22" font-size="10">Stripe</text>
+    <!-- Analytics -->
+    <rect x="315" y="330" width="120" height="50" rx="10" fill="#2a2210" stroke="#ca8a04" stroke-width="1.5"/>
+    <text x="375" y="349" text-anchor="middle" fill="#fcd34d" font-weight="700" font-size="11">Analytics</text>
+    <text x="375" y="366" text-anchor="middle" fill="#7a5a10" font-size="10">GA4 / Mixpanel</text>
+    <!-- Arrows -->
+    <line x1="80" y1="255" x2="110" y2="142" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <line x1="190" y1="117" x2="272" y2="117" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <line x1="432" y1="117" x2="512" y2="113" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <line x1="432" y1="117" x2="512" y2="130" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <line x1="652" y1="113" x2="672" y2="113" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <line x1="582" y1="138" x2="582" y2="330" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <line x1="620" y1="125" x2="732" y2="330" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <line x1="742" y1="138" x2="882" y2="330" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <line x1="540" y1="138" x2="90" y2="330" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <line x1="540" y1="140" x2="230" y2="330" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="6,3"/>
+  </svg>
+</section>
+
+<!-- ========== 12 USER JOURNEY ========== -->
+<section class="diagram-section" id="journey" style="background:#f8f8fc;">
+  <div class="section-label">12 / UX</div>
+  <h2 class="section-title">ユーザージャーニーマップ</h2>
+  <p class="section-sub">田中さん（35歳・マーケター） — フィットネスアプリ初利用体験</p>
+  <div class="journey-wrap">
+    <table class="journey-table">
+      <thead>
+        <tr>
+          <th style="background:#374151;width:100px;">フェーズ</th>
+          <th style="background:#3b82f6;">認知</th>
+          <th style="background:#0891b2;">興味・検索</th>
+          <th style="background:#16a34a;">ダウンロード</th>
+          <th style="background:#7c3aed;">初回利用</th>
+          <th style="background:#dc2626;">継続利用</th>
+          <th style="background:#8b5cf6;">紹介・推薦</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="journey-row-label">タッチポイント</td>
+          <td>Instagram広告</td><td>App Storeのレビュー確認</td><td>ダウンロード完了通知</td><td>オンボーディングチュートリアル</td><td>プッシュ通知・メール</td><td>紹介コード受取</td>
+        </tr>
+        <tr>
+          <td class="journey-row-label">行動</td>
+          <td>SNSで広告を見る</td><td>口コミ・評価を読み比べる</td><td>アプリをインストール</td><td>目標設定・プロフィール入力</td><td>トレーニング記録を継続入力</td><td>友人にアプリを勧める</td>
+        </tr>
+        <tr>
+          <td class="journey-row-label">感情・思考</td>
+          <td>😐 なんとなく気になる</td><td>🤔 本当に効果あるの？</td><td>😊 意外と簡単だった</td><td>😤 設問が多すぎる…</td><td>😊 続けると楽しい</td><td>😄 友達と一緒に！</td>
+        </tr>
+        <tr>
+          <td class="journey-row-label">ペインポイント</td>
+          <td style="color:#dc2626;">広告が多すぎて信頼しにくい</td><td style="color:#dc2626;">情報が多く判断に時間かかる</td><td style="color:#dc2626;">入力フォームが複雑</td><td style="color:#dc2626;">初回設定に時間がかかる</td><td style="color:#dc2626;">継続モチベが下がりやすい</td><td style="color:#dc2626;">紹介の仕組みが分かりにくい</td>
+        </tr>
+        <tr>
+          <td class="journey-row-label">改善機会</td>
+          <td style="color:#16a34a;">インフルエンサー連携を強化</td><td style="color:#16a34a;">比較しやすい特徴ページ</td><td style="color:#16a34a;">ソーシャルログイン簡略化</td><td style="color:#16a34a;">ステップ数を半減させる</td><td style="color:#16a34a;">ゲーミフィケーション導入</td><td style="color:#16a34a;">紹介リワード制度の整備</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ========== 13 GANTT ========== -->
+<section class="diagram-section" id="gantt">
+  <div class="section-label">13 / Project Management</div>
+  <h2 class="section-title">ガントチャート</h2>
+  <p class="section-sub">Webサービス開発プロジェクト — 2025年1月〜8月</p>
+  <div class="gantt-wrap">
+    <table class="gantt-table" style="min-width:1100px;">
+      <thead>
+        <tr>
+          <th style="width:200px;text-align:left;padding-left:12px;">タスク</th>
+          <th style="width:70px;">担当</th>
+          <th colspan="4" style="background:#e8eaff;color:#4455aa;">1月〜2月</th>
+          <th colspan="4" style="background:#e8eaff;color:#4455aa;">3月〜4月</th>
+          <th colspan="4" style="background:#eaf0ff;color:#4455aa;">5月〜6月</th>
+          <th colspan="4" style="background:#e8eaff;color:#4455aa;">7月〜8月</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="gantt-label">要件定義・企画</td>
+          <td class="gantt-role">PM</td>
+          <td colspan="4"><div class="gantt-bar" style="background:#3b82f6;width:90%;">企画</div></td>
+          <td colspan="12"></td>
+        </tr>
+        <tr>
+          <td class="gantt-label">UI/UXデザイン</td>
+          <td class="gantt-role">Designer</td>
+          <td colspan="2"></td>
+          <td colspan="5"><div class="gantt-bar" style="background:#a855f7;">デザイン</div></td>
+          <td colspan="9"></td>
+        </tr>
+        <tr>
+          <td class="gantt-label">DB設計・API設計</td>
+          <td class="gantt-role">Backend</td>
+          <td colspan="3"></td>
+          <td colspan="4"><div class="gantt-bar" style="background:#ea580c;">設計</div></td>
+          <td colspan="9"></td>
+        </tr>
+        <tr>
+          <td class="gantt-label">フロントエンド開発</td>
+          <td class="gantt-role">Frontend</td>
+          <td colspan="5"></td>
+          <td colspan="7"><div class="gantt-bar" style="background:#16a34a;">開発</div></td>
+          <td colspan="4"></td>
+        </tr>
+        <tr>
+          <td class="gantt-label">バックエンド開発</td>
+          <td class="gantt-role">Backend</td>
+          <td colspan="5"></td>
+          <td colspan="8"><div class="gantt-bar" style="background:#2563eb;">開発</div></td>
+          <td colspan="3"></td>
+        </tr>
+        <tr>
+          <td class="gantt-label">単体テスト</td>
+          <td class="gantt-role">QA</td>
+          <td colspan="9"></td>
+          <td colspan="4"><div class="gantt-bar" style="background:#d97706;">テスト</div></td>
+          <td colspan="3"></td>
+        </tr>
+        <tr>
+          <td class="gantt-label">結合テスト・修正</td>
+          <td class="gantt-role">QA</td>
+          <td colspan="11"></td>
+          <td colspan="4"><div class="gantt-bar" style="background:#dc2626;">テスト</div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="gantt-label">本番環境構築</td>
+          <td class="gantt-role">Infra</td>
+          <td colspan="10"></td>
+          <td colspan="4"><div class="gantt-bar" style="background:#7c3aed;">インフラ</div></td>
+          <td colspan="2"></td>
+        </tr>
+        <tr>
+          <td class="gantt-label">UAT・最終確認</td>
+          <td class="gantt-role">PM</td>
+          <td colspan="14"></td>
+          <td colspan="2"><div class="gantt-bar" style="background:#0891b2;">UAT</div></td>
+        </tr>
+        <tr>
+          <td class="gantt-label" style="font-weight:700;color:#16a34a;">リリース・展開</td>
+          <td class="gantt-role">All</td>
+          <td colspan="15"></td>
+          <td><div class="gantt-bar" style="background:#16a34a;justify-content:center;">🚀</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top:12px;font-size:12px;color:#dc2626;display:flex;align-items:center;gap:6px;">
+    <div style="width:16px;height:16px;background:rgba(220,38,38,.15);border-left:2px solid #dc2626;"></div>
+    <span>▼ 今日（2025年3月末時点）</span>
+  </div>
+</section>
+
+<!-- ========== 14 SEQUENCE ========== -->
+<section class="diagram-section" id="sequence" style="background:#f8f8fc;">
+  <div class="section-label">14 / Communication</div>
+  <h2 class="section-title">シーケンス図</h2>
+  <p class="section-sub">ユーザーログイン処理 — フロント / API / 認証 / DB の連携</p>
+  <svg class="seq-svg" viewBox="0 0 1100 720" xmlns="http://www.w3.org/2000/svg" style="font-family:Noto Sans JP,sans-serif;">
+    <!-- Actor boxes -->
+    <rect x="60" y="30" width="120" height="52" rx="10" fill="#3b82f6"/>
+    <text x="120" y="52" text-anchor="middle" fill="white" font-weight="700" font-size="12">ユーザー</text>
+    <text x="120" y="70" text-anchor="middle" fill="#bfdbfe" font-size="10">（ブラウザ）</text>
+
+    <rect x="270" y="30" width="120" height="52" rx="10" fill="#16a34a"/>
+    <text x="330" y="52" text-anchor="middle" fill="white" font-weight="700" font-size="12">フロント</text>
+    <text x="330" y="70" text-anchor="middle" fill="#bbf7d0" font-size="10">エンド</text>
+
+    <rect x="480" y="30" width="130" height="52" rx="10" fill="#ea580c"/>
+    <text x="545" y="57" text-anchor="middle" fill="white" font-weight="700" font-size="12">APIサーバー</text>
+
+    <rect x="690" y="30" width="130" height="52" rx="10" fill="#7c3aed"/>
+    <text x="755" y="52" text-anchor="middle" fill="white" font-weight="700" font-size="12">認証サービス</text>
+    <text x="755" y="70" text-anchor="middle" fill="#ddd6fe" font-size="10">JWT / OAuth2</text>
+
+    <rect x="910" y="30" width="130" height="52" rx="10" fill="#2563eb"/>
+    <text x="975" y="57" text-anchor="middle" fill="white" font-weight="700" font-size="12">データベース</text>
+
+    <!-- Lifelines -->
+    <line x1="120" y1="82" x2="120" y2="700" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="6,4"/>
+    <line x1="330" y1="82" x2="330" y2="700" stroke="#86efac" stroke-width="1.5" stroke-dasharray="6,4"/>
+    <line x1="545" y1="82" x2="545" y2="700" stroke="#fdba74" stroke-width="1.5" stroke-dasharray="6,4"/>
+    <line x1="755" y1="82" x2="755" y2="700" stroke="#c4b5fd" stroke-width="1.5" stroke-dasharray="6,4"/>
+    <line x1="975" y1="82" x2="975" y2="700" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+    <!-- Messages -->
+    <!-- 1: User → Front -->
+    <line x1="130" y1="140" x2="320" y2="140" stroke="#3b82f6" stroke-width="2" marker-end="url(#marr)"/>
+    <text x="225" y="132" text-anchor="middle" fill="#374151" font-size="11">ログインフォーム送信</text>
+    <!-- 2: Front → API -->
+    <line x1="340" y1="185" x2="535" y2="185" stroke="#16a34a" stroke-width="2" marker-end="url(#marr)"/>
+    <text x="437" y="177" text-anchor="middle" fill="#374151" font-size="11">POST /api/auth/login</text>
+    <!-- 3: API → Auth -->
+    <line x1="555" y1="230" x2="745" y2="230" stroke="#ea580c" stroke-width="2" marker-end="url(#marr)"/>
+    <text x="650" y="222" text-anchor="middle" fill="#374151" font-size="11">認証リクエスト（ハッシュ検証）</text>
+    <!-- 4: Auth → DB -->
+    <line x1="765" y1="275" x2="965" y2="275" stroke="#7c3aed" stroke-width="2" marker-end="url(#marr)"/>
+    <text x="865" y="267" text-anchor="middle" fill="#374151" font-size="11">SELECT user WHERE email=?</text>
+    <!-- 5: DB → Auth (return) -->
+    <line x1="965" y1="320" x2="775" y2="320" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#marr)"/>
+    <text x="870" y="312" text-anchor="middle" fill="#6b7280" font-size="11">ユーザーデータ返却</text>
+    <!-- 6: Auth → API (return) -->
+    <line x1="745" y1="365" x2="565" y2="365" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#marr)"/>
+    <text x="655" y="357" text-anchor="middle" fill="#6b7280" font-size="11">JWT トークン生成・返却</text>
+    <!-- 7: API self (log) -->
+    <path d="M545,400 L595,400 L595,430 L545,430" fill="none" stroke="#ea580c" stroke-width="1.5"/>
+    <text x="640" y="420" fill="#6b7280" font-size="11">ログイン履歴を記録</text>
+    <!-- 8: API → Front (return) -->
+    <line x1="535" y1="465" x2="345" y2="465" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#marr)"/>
+    <text x="440" y="457" text-anchor="middle" fill="#6b7280" font-size="11">200 OK { token, user }</text>
+    <!-- 9: Front self (localStorage) -->
+    <path d="M330,500 L380,500 L380,530 L330,530" fill="none" stroke="#16a34a" stroke-width="1.5"/>
+    <text x="390" y="520" fill="#6b7280" font-size="11">localStorage に token 保存</text>
+    <!-- 10: Front → User (return) -->
+    <line x1="320" y1="565" x2="135" y2="565" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#marr)"/>
+    <text x="227" y="557" text-anchor="middle" fill="#6b7280" font-size="11">ダッシュボードへリダイレクト</text>
+    <!-- Activation boxes -->
+    <rect x="126" y="130" width="10" height="450" rx="3" fill="#3b82f6" opacity="0.4"/>
+    <rect x="336" y="175" width="10" height="400" rx="3" fill="#16a34a" opacity="0.4"/>
+    <rect x="551" y="220" width="10" height="260" rx="3" fill="#ea580c" opacity="0.4"/>
+    <rect x="761" y="265" width="10" height="120" rx="3" fill="#7c3aed" opacity="0.4"/>
+    <rect x="971" y="265" width="10" height="65" rx="3" fill="#2563eb" opacity="0.4"/>
+  </svg>
+</section>
+
+<!-- ========== 15 ERD ========== -->
+<section class="diagram-section dark" id="erd">
+  <div class="section-label">15 / Database</div>
+  <h2 class="section-title">ERD</h2>
+  <p class="section-sub">ECサイト データベース設計 — エンティティ関係図</p>
+  <svg class="erd-svg" viewBox="0 0 1100 680" xmlns="http://www.w3.org/2000/svg" style="font-family:Noto Sans JP,sans-serif;">
+    <!-- Relation lines -->
+    <line x1="240" y1="200" x2="340" y2="200" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="8,4"/>
+    <text x="290" y="193" text-anchor="middle" fill="#6688bb" font-size="11">1:N</text>
+    <line x1="450" y1="340" x2="450" y2="380" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="8,4"/>
+    <text x="460" y="365" fill="#6688bb" font-size="11">N:1</text>
+    <line x1="560" y1="200" x2="620" y2="200" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="8,4"/>
+    <text x="590" y="193" text-anchor="middle" fill="#6688bb" font-size="11">1:N</text>
+    <line x1="730" y1="200" x2="800" y2="200" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="8,4"/>
+    <text x="765" y="193" text-anchor="middle" fill="#6688bb" font-size="11">1:N</text>
+    <line x1="490" y1="280" x2="850" y2="420" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="8,4"/>
+    <text x="680" y="350" fill="#6688bb" font-size="11">1:N</text>
+    <line x1="140" y1="260" x2="870" y2="420" stroke="#4466aa" stroke-width="1.5" stroke-dasharray="8,4"/>
+    <text x="500" y="400" fill="#6688bb" font-size="11">1:N</text>
+
+    <!-- Table: users -->
+    <rect x="20" y="80" width="220" height="200" rx="10" fill="#1a2035" stroke="#3b82f6" stroke-width="2"/>
+    <rect x="20" y="80" width="220" height="38" rx="10" fill="#3b82f6"/>
+    <rect x="20" y="104" width="220" height="14" fill="#3b82f6"/>
+    <text x="130" y="104" text-anchor="middle" fill="white" font-weight="700" font-size="14">users</text>
+    <text x="32" y="135" fill="#fde047" font-size="11">🔑 id: BIGINT PK</text>
+    <line x1="28" y1="142" x2="232" y2="142" stroke="#2a3555" stroke-width="1"/>
+    <text x="32" y="158" fill="#c8d5f0" font-size="11">email: VARCHAR(255)</text>
+    <line x1="28" y1="165" x2="232" y2="165" stroke="#2a3555" stroke-width="1"/>
+    <text x="32" y="181" fill="#c8d5f0" font-size="11">password_hash: TEXT</text>
+    <line x1="28" y1="188" x2="232" y2="188" stroke="#2a3555" stroke-width="1"/>
+    <text x="32" y="204" fill="#c8d5f0" font-size="11">name: VARCHAR(100)</text>
+    <line x1="28" y1="211" x2="232" y2="211" stroke="#2a3555" stroke-width="1"/>
+    <text x="32" y="227" fill="#c8d5f0" font-size="11">created_at: TIMESTAMP</text>
+    <line x1="28" y1="234" x2="232" y2="234" stroke="#2a3555" stroke-width="1"/>
+    <text x="32" y="250" fill="#c8d5f0" font-size="11">role: ENUM</text>
+    <line x1="28" y1="257" x2="232" y2="257" stroke="#2a3555" stroke-width="1"/>
+    <text x="32" y="272" fill="#c8d5f0" font-size="11">is_active: BOOLEAN</text>
+
+    <!-- Table: products -->
+    <rect x="340" y="80" width="220" height="230" rx="10" fill="#1a2035" stroke="#16a34a" stroke-width="2"/>
+    <rect x="340" y="80" width="220" height="38" rx="10" fill="#16a34a"/>
+    <rect x="340" y="104" width="220" height="14" fill="#16a34a"/>
+    <text x="450" y="104" text-anchor="middle" fill="white" font-weight="700" font-size="14">products</text>
+    <text x="352" y="135" fill="#fde047" font-size="11">🔑 id: BIGINT PK</text>
+    <line x1="348" y1="142" x2="552" y2="142" stroke="#2a3555" stroke-width="1"/>
+    <text x="352" y="158" fill="#7dd3fc" font-size="11">🔗 category_id: FK</text>
+    <line x1="348" y1="165" x2="552" y2="165" stroke="#2a3555" stroke-width="1"/>
+    <text x="352" y="181" fill="#c8d5f0" font-size="11">name: VARCHAR(200)</text>
+    <line x1="348" y1="188" x2="552" y2="188" stroke="#2a3555" stroke-width="1"/>
+    <text x="352" y="204" fill="#c8d5f0" font-size="11">price: DECIMAL(10,2)</text>
+    <line x1="348" y1="211" x2="552" y2="211" stroke="#2a3555" stroke-width="1"/>
+    <text x="352" y="227" fill="#c8d5f0" font-size="11">stock: INT</text>
+    <line x1="348" y1="234" x2="552" y2="234" stroke="#2a3555" stroke-width="1"/>
+    <text x="352" y="250" fill="#c8d5f0" font-size="11">image_url: TEXT</text>
+    <line x1="348" y1="257" x2="552" y2="257" stroke="#2a3555" stroke-width="1"/>
+    <text x="352" y="273" fill="#c8d5f0" font-size="11">description: TEXT</text>
+
+    <!-- Table: orders -->
+    <rect x="620" y="80" width="220" height="200" rx="10" fill="#1a2035" stroke="#ea580c" stroke-width="2"/>
+    <rect x="620" y="80" width="220" height="38" rx="10" fill="#ea580c"/>
+    <rect x="620" y="104" width="220" height="14" fill="#ea580c"/>
+    <text x="730" y="104" text-anchor="middle" fill="white" font-weight="700" font-size="14">orders</text>
+    <text x="632" y="135" fill="#fde047" font-size="11">🔑 id: BIGINT PK</text>
+    <line x1="628" y1="142" x2="832" y2="142" stroke="#2a3555" stroke-width="1"/>
+    <text x="632" y="158" fill="#7dd3fc" font-size="11">🔗 user_id: FK</text>
+    <line x1="628" y1="165" x2="832" y2="165" stroke="#2a3555" stroke-width="1"/>
+    <text x="632" y="181" fill="#c8d5f0" font-size="11">status: ENUM</text>
+    <line x1="628" y1="188" x2="832" y2="188" stroke="#2a3555" stroke-width="1"/>
+    <text x="632" y="204" fill="#c8d5f0" font-size="11">total_amount: DECIMAL</text>
+    <line x1="628" y1="211" x2="832" y2="211" stroke="#2a3555" stroke-width="1"/>
+    <text x="632" y="227" fill="#c8d5f0" font-size="11">created_at: TIMESTAMP</text>
+
+    <!-- Table: categories -->
+    <rect x="340" y="430" width="220" height="160" rx="10" fill="#1a2035" stroke="#ca8a04" stroke-width="2"/>
+    <rect x="340" y="430" width="220" height="38" rx="10" fill="#ca8a04"/>
+    <rect x="340" y="454" width="220" height="14" fill="#ca8a04"/>
+    <text x="450" y="454" text-anchor="middle" fill="white" font-weight="700" font-size="14">categories</text>
+    <text x="352" y="485" fill="#fde047" font-size="11">🔑 id: BIGINT PK</text>
+    <line x1="348" y1="492" x2="552" y2="492" stroke="#2a3555" stroke-width="1"/>
+    <text x="352" y="508" fill="#c8d5f0" font-size="11">name: VARCHAR(100)</text>
+    <line x1="348" y1="515" x2="552" y2="515" stroke="#2a3555" stroke-width="1"/>
+    <text x="352" y="531" fill="#c8d5f0" font-size="11">slug: VARCHAR(100)</text>
+    <line x1="348" y1="538" x2="552" y2="538" stroke="#2a3555" stroke-width="1"/>
+    <text x="352" y="554" fill="#c8d5f0" font-size="11">parent_id: BIGINT</text>
+
+    <!-- Table: order_items -->
+    <rect x="800" y="80" width="240" height="200" rx="10" fill="#1a2035" stroke="#a855f7" stroke-width="2"/>
+    <rect x="800" y="80" width="240" height="38" rx="10" fill="#a855f7"/>
+    <rect x="800" y="104" width="240" height="14" fill="#a855f7"/>
+    <text x="920" y="104" text-anchor="middle" fill="white" font-weight="700" font-size="14">order_items</text>
+    <text x="812" y="135" fill="#fde047" font-size="11">🔑 id: BIGINT PK</text>
+    <line x1="808" y1="142" x2="1032" y2="142" stroke="#2a3555" stroke-width="1"/>
+    <text x="812" y="158" fill="#7dd3fc" font-size="11">🔗 order_id: FK</text>
+    <line x1="808" y1="165" x2="1032" y2="165" stroke="#2a3555" stroke-width="1"/>
+    <text x="812" y="181" fill="#7dd3fc" font-size="11">🔗 product_id: FK</text>
+    <line x1="808" y1="188" x2="1032" y2="188" stroke="#2a3555" stroke-width="1"/>
+    <text x="812" y="204" fill="#c8d5f0" font-size="11">quantity: INT</text>
+    <line x1="808" y1="211" x2="1032" y2="211" stroke="#2a3555" stroke-width="1"/>
+    <text x="812" y="227" fill="#c8d5f0" font-size="11">unit_price: DECIMAL</text>
+
+    <!-- Table: reviews -->
+    <rect x="800" y="420" width="240" height="200" rx="10" fill="#1a2035" stroke="#0891b2" stroke-width="2"/>
+    <rect x="800" y="420" width="240" height="38" rx="10" fill="#0891b2"/>
+    <rect x="800" y="444" width="240" height="14" fill="#0891b2"/>
+    <text x="920" y="444" text-anchor="middle" fill="white" font-weight="700" font-size="14">reviews</text>
+    <text x="812" y="475" fill="#fde047" font-size="11">🔑 id: BIGINT PK</text>
+    <line x1="808" y1="482" x2="1032" y2="482" stroke="#2a3555" stroke-width="1"/>
+    <text x="812" y="498" fill="#7dd3fc" font-size="11">🔗 user_id: FK</text>
+    <line x1="808" y1="505" x2="1032" y2="505" stroke="#2a3555" stroke-width="1"/>
+    <text x="812" y="521" fill="#7dd3fc" font-size="11">🔗 product_id: FK</text>
+    <line x1="808" y1="528" x2="1032" y2="528" stroke="#2a3555" stroke-width="1"/>
+    <text x="812" y="544" fill="#c8d5f0" font-size="11">rating: TINYINT(1-5)</text>
+    <line x1="808" y1="551" x2="1032" y2="551" stroke="#2a3555" stroke-width="1"/>
+    <text x="812" y="567" fill="#c8d5f0" font-size="11">comment: TEXT</text>
+    <line x1="808" y1="574" x2="1032" y2="574" stroke="#2a3555" stroke-width="1"/>
+    <text x="812" y="590" fill="#c8d5f0" font-size="11">created_at: TIMESTAMP</text>
+  </svg>
+</section>
+
+<footer>
+  <p>Diagram Gallery — Claude Code × Figma 性能テスト / 2025</p>
+  <p style="margin-top:8px;font-size:11px;">Generated with Claude Code + Figma MCP</p>
+</footer>
+
+</body>
+</html>
