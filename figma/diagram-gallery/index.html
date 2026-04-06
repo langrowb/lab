@@ -31,10 +31,10 @@
   .sticky-nav { position: sticky; top: 0; z-index: 100; background: rgba(15, 15, 35, 0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 15px 80px; }
   .nav-chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .nav-chips a { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #aabcee; font-size: 12px; padding: 6px 14px; border-radius: 20px; text-decoration: none; transition: background .2s; margin: 5px 0; }
-  .nav-chips a:hover { background: rgba(108,143,255,0.25); color: #fff; }
+  .nav-chips a:hover, .nav-chips a:focus-visible { background: rgba(108,143,255,0.25); color: #fff; outline: 2px solid #6c8fff; outline-offset: 2px; }
 
   /* Section wrapper */
-  .diagram-section { max-width: 1440px; margin: 0 auto; padding: 60px 80px; }
+  .diagram-section { max-width: 1440px; margin: 0 auto; padding: 60px 80px; scroll-margin-top: 60px; }
   .diagram-section + .diagram-section { border-top: 1px solid #e0e0ea; }
   .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #8899bb; margin-bottom: 8px; }
   .section-title { font-size: 28px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
@@ -188,7 +188,7 @@
     .site-header { padding-top: 94px; }
 
     /* Sections */
-    .diagram-section { padding: 40px 20px; max-width: 100vw; overflow-x: auto; }
+    .diagram-section { padding: 40px 20px; max-width: 100vw; overflow-x: auto; scroll-margin-top: 54px; }
     .section-title { font-size: 22px; }
     .section-sub { font-size: 13px; margin-bottom: 28px; }
 
@@ -226,6 +226,7 @@
   }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
